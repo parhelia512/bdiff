@@ -40,11 +40,11 @@ The following environment variables are required:
 
 ## Get the source code
 
-The source code of _BDiff / BPatch_ is maintained in the [`delphidabbler/bdiff`](https://github.com/delphidabbler/bdiff) Git repository on GitHub.
+The source code of _BDiff / BPatch_ is maintained in the [`ddabapps/bdiff`](https://github.com/ddabapps/bdiff) Git repository on GitHub.
 
-You can get the source code of the latest release by using Git to clone `https://github.com/delphidabbler/bdiff.git`. Switch to the `master` branch. If you want the latest development code make sure to pull the `develop` branch and switch to that.
+You can get the source code of the latest release by using Git to clone `https://github.com/ddabapps/bdiff.git`. Switch to the `master` branch. If you want the latest development code make sure to pull the `develop` branch and switch to that.
 
-Alternatively you can download a source code archive from [GitHub](https://github.com/delphidabbler/bdiff/releases). Ensure you download the latest release and unzip it with the directory structure preserved.
+Alternatively you can download a source code archive from [GitHub](https://github.com/ddabapps/bdiff/releases). Ensure you download the latest release and unzip it with the directory structure preserved.
 
 Once you have the source code you should have a folder structure like this:
 

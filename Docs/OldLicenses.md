@@ -57,13 +57,13 @@ Copies of this license can be found at http://www.delphidabbler.com/software/bdi
 
 From v0.2.5, licenses have been recorded in Git. The following links will display the licenses on GitHub:
 
-* [v0.2.5](https://github.com/delphidabbler/bdiff/blob/v0.2.5/Docs/LICENSE)
-* [v0.2.6](https://github.com/delphidabbler/bdiff/blob/v0.2.6/Docs/LICENSE)
-* [v0.2.6a](https://github.com/delphidabbler/bdiff/blob/v0.2.6a/Docs/LICENSE)
-* [v0.2.7](https://github.com/delphidabbler/bdiff/blob/v0.2.7/LICENSE.md)
-* [v0.2.8](https://github.com/delphidabbler/bdiff/blob/v0.2.8/LICENSE.md)
-* [v0.2.9](https://github.com/delphidabbler/bdiff/blob/v0.2.9/LICENSE.md)
+* [v0.2.5](https://github.com/ddabapps/bdiff/blob/v0.2.5/Docs/LICENSE)
+* [v0.2.6](https://github.com/ddabapps/bdiff/blob/v0.2.6/Docs/LICENSE)
+* [v0.2.6a](https://github.com/ddabapps/bdiff/blob/v0.2.6a/Docs/LICENSE)
+* [v0.2.7](https://github.com/ddabapps/bdiff/blob/v0.2.7/LICENSE.md)
+* [v0.2.8](https://github.com/ddabapps/bdiff/blob/v0.2.8/LICENSE.md)
+* [v0.2.9](https://github.com/ddabapps/bdiff/blob/v0.2.9/LICENSE.md)
 
 ## License used for v1.x.x
 
-From release v1.0.0 the license was changed to the [BSD 3 clause license](https://github.com/delphidabbler/bdiff/blob/master/LICENSE.md).
+From release v1.0.0 the license was changed to the [BSD 3 clause license](https://github.com/ddabapps/bdiff/blob/master/LICENSE.md).
