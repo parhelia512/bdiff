@@ -21,12 +21,7 @@
 ::    4) Set the VIEDROOT environment variable to the directory where VIEd.exe 
 ::       is installed.
 ::    5) Change directory to that where this script is located.
-::    6) Run the script.
-::
-::  Usage:
-::    Deploy <version>
-::  where
-::    <version> is the version number of the release, e.g. 0.5.3-beta or 1.2.0.
+::    6) Run the script, without parameters
 
 @echo off
 
@@ -34,18 +29,44 @@ echo -----------------------
 echo Deploying BDiff Release
 echo -----------------------
 
-:: Check for required parameter
-
-if "%1"=="" goto paramerror
-
 :: Check for required environment variables
 
 if "%ZipRoot%"=="" goto envvarerror
 if "%VIEdRoot%"=="" goto envvarerror
 
+:: Get version info from Src\VERSION
+
+:: Set path to file containing version information
+set VerFile=.\Src\VERSION
+
+:: Undefine the variables used to collect version information
+set vernum=
+set suffix=
+
+:: Get the version number from the version info file - this MUST exist
+for /f "tokens=2 delims==" %%A in (
+  'findstr /rc:"^version" %VerFile%'
+) do (
+    set vernum=%%A
+  )
+)
+if not defined vernum (
+    goto badversionerror
+)
+
+:: Get the optional version number suffix from the version info file
+for /f "tokens=2 delims==" %%A in (
+  'findstr /rc:"^suffix" %VerFile%'
+) do (
+    set suffix=%%A
+)
+
+:: Record & report the build version
+set Version=%vernum%%suffix%
+echo Building release v%Version%
+
 :: Set variables
 
-set Version=%1
 set BuildRoot=.\_build
 set Exe32Dir=%BuildRoot%\Win32\exe
 set Exe64Dir=%BuildRoot%\Win64\exe
@@ -56,6 +77,7 @@ set SrcDir=Src
 set DocsDir=Docs
 
 :: Make a clean directory structure
+
 if exist %BuildRoot% rmdir /S /Q %BuildRoot%
 mkdir %ReleaseDir%
 
@@ -87,6 +109,7 @@ endlocal
 
 echo.
 echo Creating zip files
+
 :: 32 bit
 %ZipRoot%\zip.exe -j -9 %ZipFile32% %Exe32Dir%\BDiff.exe
 %ZipRoot%\zip.exe -j -9 %ZipFile32% %Exe32Dir%\BPatch.exe
@@ -94,6 +117,7 @@ echo Creating zip files
 %ZipRoot%\zip.exe -r -9 %ZipFile32% %DocsDir%\BPatch.md
 %ZipRoot%\zip.exe -j -9 %ZipFile32% README.md LICENSE.md CHANGELOG.md
 %ZipRoot%\zip.exe -r -9 %ZipFile32% Test
+
 :: 64 bit
 %ZipRoot%\zip.exe -j -9 %ZipFile64% %Exe64Dir%\BDiff.exe
 %ZipRoot%\zip.exe -j -9 %ZipFile64% %Exe64Dir%\BPatch.exe
@@ -112,15 +136,15 @@ goto end
 
 :: Error messages
 
-:paramerror
-echo.
-echo ***ERROR: Please specify a version number as a parameter
-echo.
-goto end
-
 :envvarerror
 echo.
 echo ***ERROR: ZipRoot and/or VIEdRoot environment variable not set
+echo.
+goto end
+
+:badversionerror
+echo.
+echo ***ERROR: "version" field not set in %VerFile%
 echo.
 goto end
 
