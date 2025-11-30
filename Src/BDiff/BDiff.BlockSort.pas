@@ -23,29 +23,35 @@ type
   ///  <summary>Class that implements the block sort part of the diff.</summary>
   TBlockSort = class(TObject)
   strict private
+    var
+      fData: PCCharArray;
+      fDataSize: Int32;
     ///  <summary>Compares elements of array of <c>TCChar</c> characters
     ///  starting from index <c>A</c>, with elements of same array starting at
     ///  index <c>B</c>.</summary>
-    class function Compare(A, B: Int32; Data: PCCharArray; DataSize: Int32):
-      Int32;
+    function Compare(const A, B: Int32): Int32;
     ///  <summary>Heap sort sink.</summary>
-    class procedure Sink(Left, Right: Int32; Block: PBlock; Data: PCCharArray;
-      DataSize: Int32);
+    procedure Sink(const Left, Right: Int32; const Block: PBlock);
   public
-    ///  <summary>Returns array of offsets into data, sorted by position.
-    ///  </summary>
+    ///  <summary>Object constructor.</summary>
     ///  <param name="Data">[in] Data to be sorted. Must not be nil.</param>
     ///  <param name="DataSize"> [in] Size of data to be sorted, must be &gt; 0.
     ///  </param>
-    ///  <returns><c>PBlock</c>. Pointer to block of sorted indices into Data.
-    ///  Caller must free.</returns>
-    ///  <exception>Raises <c>EOutOfMemory</c> if the reutned data block can't
-    ///  be allocated.</exception>
-    class function Execute(Data: PCCharArray; DataSize: Int32): PBlock;
+    constructor Create(const Data: PCCharArray; const DataSize: Int32);
+    ///  <summary>Returns array of offsets into data, sorted by position.
+    ///  </summary>
+    ///  <returns><c>PBlock</c>. Pointer to block of sorted indices into Data or
+    ///  <c>nil</c> if the block can't be allocated. Caller must free.
+    ///  </returns>
+    function Execute: PBlock;
   end;
 
 
 implementation
+
+uses
+  // Delphi
+  System.SysUtils;
 
 
 {
@@ -68,15 +74,12 @@ implementation
 
 { TBlockSort }
 
-class function TBlockSort.Compare(A, B: Int32; Data: PCCharArray;
-  DataSize: Int32): Int32;
+function TBlockSort.Compare(const A, B: Int32): Int32;
 begin
-  var PA: PCChar := @Data[A];
-  var PB: PCChar := @Data[B];
-  var Len: Int32 := DataSize - A;
-  if DataSize - B < Len then
-    Len := DataSize - B;
-  while (Len <> 0) and (PA^ = PB^) do
+  var PA: PCChar := @fData[A];
+  var PB: PCChar := @fData[B];
+  var Len: Int32 := if A > B then A else B;
+  while (Len > 0) and (PA^ = PB^) do
   begin
     Inc(PA);
     Inc(PB);
@@ -87,24 +90,38 @@ begin
   Result := PA^ - PB^;
 end;
 
-class function TBlockSort.Execute(Data: PCCharArray; DataSize: Int32): PBlock;
+constructor TBlockSort.Create(const Data: PCCharArray; const DataSize: Int32);
 begin
-  if DataSize = 0 then
-    Exit(nil);
+  Assert(Assigned(Data), 'TBlockSort.Create: Data is nil');
+  Assert(DataSize > 0, 'TBlockSort.Create: DataSize <= 0');
+  inherited Create;
+  fData := Data;
+  fDataSize := DataSize;
+end;
 
-  GetMem(Result, SizeOf(Int32) * DataSize);
+function TBlockSort.Execute: PBlock;
+begin
+  // attempt to allocate memory
+  try
+    GetMem(Result, SizeOf(Int32) * fDataSize);
+  except
+    on E: EOutOfMemory do
+      Exit(nil);
+    else
+      raise;
+  end;
 
   // initialize unsorted data
-  for var I := 0 to Pred(DataSize) do
+  for var I := 0 to Pred(fDataSize) do
     Result[I] := I;
 
   // heapsort
-  var Left := DataSize div 2;
-  var Right := DataSize;
+  var Left := fDataSize div 2;
+  var Right := fDataSize;
   while Left > 0 do
   begin
     Dec(Left);
-    Sink(Left, Right, Result, Data, DataSize);
+    Sink(Left, Right, Result);
   end;
   while Right > 0 do
   begin
@@ -112,12 +129,11 @@ begin
     Result[Left] := Result[Right-1];
     Result[Right-1] := Temp;
     Dec(Right);
-    Sink(Left, Right, Result, Data, DataSize);
+    Sink(Left, Right, Result);
   end;
 end;
 
-class procedure TBlockSort.Sink(Left, Right: Int32; Block: PBlock;
-  Data: PCCharArray; DataSize: Int32);
+procedure TBlockSort.Sink(const Left, Right: Int32; const Block: PBlock);
 begin
   var I := Left;
   var X := Block[I];
@@ -127,9 +143,9 @@ begin
     if J >= Right then
       Break;
     if J < Right - 1 then
-      if Compare(Block[J], Block[J+1], Data, DataSize) < 0 then
+      if Compare(Block[J], Block[J+1]) < 0 then
         Inc(J);
-    if Compare(X, Block[J], Data, DataSize) > 0 then
+    if Compare(X, Block[J]) > 0 then
       Break;
     Block[I] := Block[J];
     I := J;
