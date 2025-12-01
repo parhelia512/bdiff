@@ -49,6 +49,8 @@ end;
 
 procedure TCheckSum.AddBuffer(Data: PCChar; Length: Int32);
 begin
+  Assert(Assigned(Data), 'TCheckSum.AddBuffer: Data = nil');
+  Assert(Length >= 0, 'TCheckSum.AddBuffer: Length < 0');
   while Length > 0 do
   begin
     Dec(Length);

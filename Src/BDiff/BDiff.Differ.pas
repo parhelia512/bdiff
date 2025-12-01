@@ -203,10 +203,17 @@ begin
     OldFile := TFileData.Create(OldFileName);
     Logger.Log('loading new file');
     NewFile := TFileData.Create(NewFileName);
+
     Logger.Log('block sorting old file');
-    SortedOldData := TBlockSort.Execute(OldFile.Data, OldFile.Size);
-    if not Assigned(SortedOldData) then
-      Error('virtual memory exhausted');
+    var BlockSorter := TBlockSort.Create(OldFile.Data, OldFile.Size);
+    try
+      SortedOldData := BlockSorter.Execute;
+      if not Assigned(SortedOldData) then
+        Error('virtual memory exhausted');
+    finally
+      BlockSorter.Free
+    end;
+
     Logger.Log('generating patch');
     PatchWriter.Header(OldFile, NewFile);
     // main loop
@@ -238,6 +245,7 @@ begin
       end;
     end;
     Logger.Log('done');
+
   finally
     if Assigned(SortedOldData) then
       FreeMem(SortedOldData);

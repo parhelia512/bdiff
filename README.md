@@ -14,19 +14,17 @@ _BDiff_ and _BPatch_ are derived from Stefan Reuther's _bdiff_ and _bpatch_ v0.2
 
 The original C source was translated into Object Pascal by [Peter D Johnson](https://gravatar.com/delphidabbler). The programs are based on updates of the Pascal code base.
 
-The programs should run on Windows 7 SP1 and later.
-
 For more information see the see the [project web pages](http://delphidabbler.com/software/bdiff).
 
 ## Installation & Uninstallation
 
 _BDiff_ and _BPatch_ are available as both 32 bit and 64 bit Windows console applications.
 
-The latest release can be downloaded from the project's [GitHub releases page](https://github.com/delphidabbler/bdiff/releases).
+The latest release can be downloaded from the project's [GitHub releases page](https://github.com/ddabapps/bdiff/releases).
 
 Both programs are packaged together in a zip file. There is one zip file for the 32 bit Windows version and another for the 64 bit Windows version. Download the desired version and unzip the file.
 
-Copy the both executable files to the required location. Always place both programs in the same directory. No further installation is required.
+Copy both executable files to the required location. Always place both programs in the same directory. No further installation is required.
 
 You may want to modify the Windows PATH environment variable to include the location of the programs.
 
@@ -40,7 +38,7 @@ You can test the operation of _BDiff_ and _BPatch_ using the `Test.bat`, `Test32
 
 ### Pascal Source
 
-The current source code is maintained in the [delphidabbler/bdiff](https://github.com/delphidabbler/bdiff) Git repository on GitHub. It contains releases going back to v0.2.5. Earlier versions were not under version control and are no longer available.
+The current source code is maintained in the [ddabapps/bdiff](https://github.com/ddabapps/bdiff) Git repository on GitHub. It contains releases going back to v0.2.5. Earlier versions were not under version control and are no longer available.
 
 > **Note:** Until February 2014 the source code was maintained in a Subversion repository. A dump of the repo is available from [Google Drive](https://drive.google.com/file/d/0B8qEVqTUMgmJcF9zVnk0Zk1VMDQ/view?usp=sharing).
 
