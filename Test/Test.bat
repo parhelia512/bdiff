@@ -209,21 +209,23 @@ goto end
 :: Display usage information
 
 :usage
+:: check if user has set script name: use it if so, else use this script's name
+if "%SCRIPTNAME%" == "" set SCRIPTNAME=%0
 if not "%ErrorMsg%" == "" echo *** ERROR: %ErrorMsg%
 echo Usage is:
-echo   test.bat patch [large ^| huge]
+echo   %SCRIPTNAME% patch [large ^| huge]
 echo     test binary patching
 echo       (specify large to use larger test files)
-echo       (specify huge to use >10MiB test files - takes a LONG time)
-echo   test.bat quoted [view]
+echo       (specify huge to use ^>10MiB test files - takes a LONG time)
+echo   %SCRIPTNAME% quoted [view]
 echo     test quoted text diff (specify view to display diff in notepad)
-echo   test.bat filtered [view]
+echo   %SCRIPTNAME% filtered [view]
 echo     test filtered text diff (specify view to display diff in notepad)
-echo   test.bat version
+echo   %SCRIPTNAME% version
 echo     display version information for BDiff and BPatch
-echo   test.bat help
+echo   %SCRIPTNAME% help
 echo     display help screens for BDiff and BPatch
-echo   test.bat clean
+echo   %SCRIPTNAME% clean
 echo     remove all generated files
 echo For more information see Tests\ReadMe.md
 goto end
