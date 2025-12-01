@@ -119,6 +119,8 @@ type
     ///  </param>
     procedure CopyHeader(NewPos, OldPos, Length: Int32);
 
+  public
+
     ///  <summary>Write patch file header.</summary>
     ///  <param name="OldFile">[in] Information about old file.</param>
     ///  <param name="NewFile">[in] Information about new file.</param>
@@ -198,6 +200,8 @@ end;
 
 procedure TBinaryPatchWriter.Add(Data: PCChar; Length: Int32);
 begin
+  Assert(Assigned(Data), 'TBinaryPatchWriter.Add: Data is nil');
+  Assert(Length >= 0, 'TBinaryPatchWriter.Add: Length < 0');
   TIO.WriteStr(TIO.StdOut, TPatchHeaders.AddIndicator);
   var Rec: TPatchHeaders.TAddedData;
   Rec.DataLength.Pack(Length);
@@ -219,6 +223,10 @@ end;
 procedure TBinaryPatchWriter.Copy(NewBuf: PCCharArray; NewPos, OldPos,
   Length: Int32);
 begin
+  Assert(Assigned(NewBuf), 'TBinaryPatchWriter.Copy: NewBuf is nil');
+  Assert(NewPos >= 0, 'TBinaryPatchWriter.Copy: NewPos < 0');
+  Assert(OldPos >= 0, 'TBinaryPatchWriter.Copy: OldPos < 0');
+  Assert(Length >= 0, 'TBinaryPatchWriter.Copy: Length < 0');
   TIO.WriteStr(TIO.StdOut, TPatchHeaders.CommonIndicator);
   var Rec: TPatchHeaders.TCommonData;
   Rec.CopyStart.Pack(OldPos);
@@ -229,6 +237,8 @@ end;
 
 procedure TBinaryPatchWriter.Header(const OldFile, NewFile: TFileData);
 begin
+  Assert(Assigned(OldFile), 'TBinaryPatchWriter.Header: OldFile is nil');
+  Assert(Assigned(NewFile), 'TBinaryPatchWriter.Header: NewFile is nil');
   var Head: TPatchHeaders.THeader;
   Head.SetValidSignature;
   Head.OldDataSize.Pack(OldFile.Size);
@@ -249,6 +259,8 @@ end;
 
 procedure TTextPatchWriter.Header(const OldFile, NewFile: TFileData);
 begin
+  Assert(Assigned(OldFile), 'TTextPatchWriter.Header: OldFile is nil');
+  Assert(Assigned(NewFile), 'TTextPatchWriter.Header: NewFile is nil');
   TIO.WriteStrFmt(
     TIO.StdOut,
     '%% --- %s (%d bytes)'#13#10'%% +++ %s (%d bytes)'#13#10,
@@ -265,6 +277,8 @@ end;
 
 procedure TQuotedPatchWriter.Add(Data: PCChar; Length: Int32);
 begin
+  Assert(Assigned(Data), 'TQuotedPatchWriter.Add: Data is nil');
+  Assert(Length >= 0, 'TQuotedPatchWriter.Add: Length < 0');
   TIO.WriteStr(TIO.StdOut, '+');
   QuotedData(Data, Length);
   TIO.WriteStr(TIO.StdOut, #13#10);
@@ -285,6 +299,10 @@ end;
 procedure TQuotedPatchWriter.Copy(NewBuf: PCCharArray; NewPos, OldPos,
   Length: Int32);
 begin
+  Assert(Assigned(NewBuf), 'TQuotedPatchWriter.Copy: NewBuf is nil');
+  Assert(NewPos >= 0, 'TQuotedPatchWriter.Copy: NewPos < 0');
+  Assert(OldPos >= 0, 'TQuotedPatchWriter.Copy: OldPos < 0');
+  Assert(Length >= 0, 'TQuotedPatchWriter.Copy: Length < 0');
   CopyHeader(NewPos, OldPos, Length);
   QuotedData(@NewBuf[NewPos], Length);
   TIO.WriteStr(TIO.StdOut, #13#10);
@@ -307,6 +325,8 @@ end;
 
 procedure TFilteredPatchWriter.Add(Data: PCChar; Length: Int32);
 begin
+  Assert(Assigned(Data), 'TFilteredPatchWriter.Add: Data is nil');
+  Assert(Length >= 0, 'TFilteredPatchWriter.Add: Length < 0');
   TIO.WriteStr(TIO.StdOut, '+');
   FilteredData(Data, Length);
   TIO.WriteStr(TIO.StdOut, #13#10);
@@ -315,6 +335,10 @@ end;
 procedure TFilteredPatchWriter.Copy(NewBuf: PCCharArray; NewPos, OldPos,
   Length: Int32);
 begin
+  Assert(Assigned(NewBuf), 'TFilteredPatchWriter.Copy: NewBuf is nil');
+  Assert(NewPos >= 0, 'TFilteredPatchWriter.Copy: NewPos < 0');
+  Assert(OldPos >= 0, 'TFilteredPatchWriter.Copy: OldPos < 0');
+  Assert(Length >= 0, 'TFilteredPatchWriter.Copy: Length < 0');
   CopyHeader(NewPos, OldPos, Length);
   FilteredData(@NewBuf[NewPos], Length);
   TIO.WriteStr(TIO.StdOut, #13#10);
